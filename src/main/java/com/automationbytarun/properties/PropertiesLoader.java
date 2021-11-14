@@ -8,7 +8,7 @@ import java.io.FileInputStream;
 import java.util.Properties;
 
 public class PropertiesLoader {
-    static Properties configProperties;
+    public static Properties configProperties;
     public static String runOnBrowser;
     public static Boolean takeScreenshot;
     public static String chromeDriverPath;
@@ -22,6 +22,7 @@ public class PropertiesLoader {
     public static boolean headless;
     public static boolean deleteCookies;
     public static boolean remoteRun;
+    public static String appUrl;
 
     public static void initializeProperties() throws Exception {
         if (configProperties == null) {
@@ -42,6 +43,7 @@ public class PropertiesLoader {
         headless = Boolean.valueOf(configProperties.getProperty("headless"));
         deleteCookies = Boolean.valueOf(configProperties.getProperty("deleteCookies"));
         remoteRun = Boolean.valueOf(configProperties.getProperty("remoteRun"));
+        appUrl = configProperties.getProperty("appUrl");
     }
 
 
