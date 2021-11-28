@@ -1,5 +1,6 @@
 package com.automationbytarun.components;
 
+import com.relevantcodes.extentreports.LogStatus;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
@@ -19,8 +20,9 @@ public class BaseActions {
             ElementFindBy findObj = new ElementFindBy(driver);
             WebElement elementBy = findObj.findElementBy(elementRef);
             elementBy.click();
+            ExtentTestManager.getTest().log(LogStatus.PASS, "Clicked Successfully on " + elementRef);
         } catch (Exception e) {
-
+            ExtentTestManager.getTest().log(LogStatus.FAIL, "Unable to click on " + elementRef);
         }
     }
 
@@ -31,8 +33,9 @@ public class BaseActions {
             elementBy.click();
             elementBy.clear();
             elementBy.sendKeys(text);
+            ExtentTestManager.getTest().log(LogStatus.PASS, "Typed value [" + text + "] into element [" + elementRef + "]");
         } catch (Exception e) {
-
+            ExtentTestManager.getTest().log(LogStatus.FAIL, "Failed to Type value [" + text + "] into element [" + elementRef + "]");
         }
     }
 
@@ -40,11 +43,29 @@ public class BaseActions {
         try {
             ElementFindBy findObj = new ElementFindBy(driver);
             WebElement elementBy = findObj.findElementBy(elementRef);
+            ExtentTestManager.getTest().log(LogStatus.PASS, "Text fetched from Element [" + elementRef + "]");
             return elementBy.getText();
         } catch (Exception e) {
+            ExtentTestManager.getTest().log(LogStatus.FAIL, "Unable to fetch Text from Element [" + elementRef + "]");
             return null;
         }
     }
+
+    public static String captureSnapshot(String testName, WebDriver driver) throws Exception {
+        try {
+            ThreadLocal<String> base64 = new ThreadLocal<String>();
+            TakesScreenshot screenshot = (TakesScreenshot) driver;
+            String snapshotFile = "data:image/png;base64,"
+                    + screenshot.getScreenshotAs(OutputType.BASE64);
+            base64.set(snapshotFile);
+            return base64.get();
+        } catch (Exception e) {
+            ExtentTestManager.getTest().log(LogStatus.FAIL, "Unable to capture screenshot</b></p>");
+
+        }
+        return null;
+    }
+
 
     public String getAttributeForElement(String elementRef, String attributeType) {
         try {
